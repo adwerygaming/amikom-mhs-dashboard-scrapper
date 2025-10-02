@@ -7,3 +7,7 @@ amikom.on("error", (e: any) => {
     console.log(`[${tags.Amikom}] AmikomService Error`)
     console.error(e)
 })
+
+amikom.on("class_finished", (class) => {
+    
+})

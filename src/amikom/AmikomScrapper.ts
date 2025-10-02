@@ -140,6 +140,15 @@ export class AmikomScrapper {
 
     async FetchClassSchedule(): Promise<GetClassScheduleResponse> {
         const page = await BrowserService.NewPage()
+        const isLoggedIn = await this.CheckLogin(page)
+
+        if (!isLoggedIn) {
+            console.log(`[${tags.Amikom}] FetchMe: Not logged in. Automatically login..`)
+            const { status } = await this.Login()
+            if (status != "success") {
+                return { status: "failed", data: null }
+            }
+        }
 
         console.log(`[${tags.Amikom}] FetchClassSchedule: Fetching API`)
 
