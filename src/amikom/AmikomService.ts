@@ -16,19 +16,27 @@ interface AmikomServiceEvents {
     class_upcoming_10m: ClassSchedule
     class_upcoming_5m: ClassSchedule
     class_finished: ClassSchedule
+    error: any
 }
 
-class TypedEmmiter<T> extends EventEmitter {
+class TypedEmitter<T> {
+    private ee = new EventEmitter();
+
     on<K extends keyof T>(event: K, listener: (arg: T[K]) => void): this {
-        return super.on(event as string, listener)
+        this.ee.on(event as string, listener);
+        return this;
     }
 
     emit<K extends keyof T>(event: K, arg: T[K]): boolean {
-        return super.emit(event as string, arg)
+        return this.ee.emit(event as string, arg);
+    }
+
+    eventNames(): (keyof T)[] {
+        return this.ee.eventNames() as (keyof T)[];
     }
 }
 
-export class AmikomService extends TypedEmmiter<AmikomServiceEvents> {
+export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
     constructor() {
         super();
         this.startPolling()
