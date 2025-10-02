@@ -81,7 +81,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
         while (true) {
             try {
                 console.log(`[${tags.Amikom}] Polling.`)
-                const getClassSchedule = await this.mhs.GetClassSchedules()
+                const getClassSchedule = await this.mhs.GetClassSchedules() // cached
 
                 if (getClassSchedule) {
                     const latestSchedules = getClassSchedule.data;
@@ -132,23 +132,23 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                     state.started = true
                                 } else if (moment().isBefore(start)) {
                                     const diff = moment(start).diff(moment(), "minutes")
-                                    if (diff <= 60 && diff > 59 && !state.notified["1h"]) {
+                                    if (diff <= 60 && diff > 30 && !state.notified["1h"]) {
                                         // upcomin 1h
                                         this.emit("class_upcoming_1h", currentSchedule)
                                         state.notified["1h"] = true;
-                                    } else if (diff <= 30 && diff > 29 && !state.notified["30m"]) {
+                                    } else if (diff <= 30 && diff > 15 && !state.notified["30m"]) {
                                         // upcomin 30m
                                         this.emit("class_upcoming_30m", currentSchedule)
                                         state.notified["30m"] = true;
-                                    } else if (diff <= 15 && diff > 14 && !state.notified["15m"]) {
+                                    } else if (diff <= 15 && diff > 10 && !state.notified["15m"]) {
                                         // upcomin 15m
                                         this.emit("class_upcoming_15m", currentSchedule)
                                         state.notified["15m"] = true;
-                                    } else if (diff <= 10 && diff > 9 && !state.notified["10m"]) {
+                                    } else if (diff <= 10 && diff > 5 && !state.notified["10m"]) {
                                         // upcoming 10m
                                         this.emit("class_upcoming_10m", currentSchedule)
                                         state.notified["10m"] = true;
-                                    } else if (diff <= 5 && diff > 4 && !state.notified["5m"]) {
+                                    } else if (diff <= 5 && diff > 0 && !state.notified["5m"]) {
                                         // upcoming 5m
                                         this.emit("class_upcoming_5m", currentSchedule)
                                         state.notified["5m"] = true;
