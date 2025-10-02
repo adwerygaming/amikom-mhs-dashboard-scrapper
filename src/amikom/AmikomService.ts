@@ -105,12 +105,19 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                 const lastPoll = await DatabaseService.lastPollSchedule.Get()
                                 const currentSchedule = res?.schedule
 
+                                console.log(`[${tags.Debug}] Current Schedule`)
+                                console.log(`[${tags.Debug}] ${currentSchedule?.IdKuliah} - ${currentSchedule?.MataKuliah}`)
+                                console.log("")
+                                console.log(`[${tags.Debug}] Last Schedule`)
+                                console.log(`[${tags.Debug}] ${lastPoll?.data?.IdKuliah} - ${lastPoll?.data?.MataKuliah}`)
+
                                 if (!currentSchedule) {
                                     return
                                 }
 
                                 if (lastPoll?.data?.IdKuliah != currentSchedule.IdKuliah) {
                                     // diff
+                                    console.log(`[${tags.Debug}] diff!`)
 
                                     if (moment().isAfter(start) && moment().isBefore(end)) {
                                         this.emit("class_started", currentSchedule)
@@ -134,8 +141,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                         }
                                     } else if (moment().isAfter(end)) {
                                         // finished
-                                            this.emit("class_finished", currentSchedule)
-
+                                        this.emit("class_finished", currentSchedule)
                                     }
                                 }
 
