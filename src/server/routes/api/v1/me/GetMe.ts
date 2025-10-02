@@ -1,0 +1,23 @@
+import { AmikomService } from "../../../../../amikom/AmikomService.js";
+import { RequestMethod, ResponseSchema, RouteLayout } from "../../../../../types/ServerTypes.js";
+import { Request, Response } from "express"
+
+export default {
+    metadata: {
+        name: "Get Name, NPM, KRS Status, Semester Name",
+        method: RequestMethod.GET,
+        path: "/"
+    },
+    execute: async (_req: Request, res: Response) => {
+        const data = await AmikomService.mhs.GetMe()
+
+        const response: ResponseSchema<typeof data> = {
+            code: 200,
+            message: "monggo mas.",
+            data
+        }
+
+        res.status(response.code).json(response);
+        return
+    },
+} as RouteLayout
