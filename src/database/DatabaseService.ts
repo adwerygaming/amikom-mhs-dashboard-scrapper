@@ -19,20 +19,25 @@ export interface LastPollScheduleProp {
     data: ClassSchedule | null
 }
 
+export interface ClassState {
+    started: boolean
+    finished: boolean
+    notified: Record<string, boolean>
+    schedule: ClassSchedule
+}
+
 export const DatabaseService = {
-    lastPollSchedule: {
-        Get: async (): Promise<LastPollScheduleProp | null> => {
-            let data: ClassSchedule | null = await AmikomDB.get("lastPollSchedule")
-
-            return { data }
+    classStates: {
+        Get: async (): Promise<Record<string, ClassState>> => {
+            let data: Record<string, ClassState> | null = await AmikomDB.get("classStates")
+            return data ?? {}
         },
-        Set: async (data: ClassSchedule): Promise<LastPollScheduleProp> => {
-            await AmikomDB.set("lastPollSchedule", data)
-
-            return { data }
+        Set: async (states: Record<string, ClassState>): Promise<Record<string, ClassState>> => {
+            await AmikomDB.set("classStates", states)
+            return states
         },
         Delete: async (): Promise<boolean> => {
-            await AmikomDB.delete("me")
+            await AmikomDB.delete("classStates")
             return true
         }
     },

@@ -97,13 +97,28 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                             todaySchedules.map(async (x) => await ConvertDayNameToDate(x))
                         )
 
+                        const states = await DatabaseService.classStates.Get()
+
                         if (results && results.length > 0) {
                             for (const res of results) {
                                 const end = res?.end
                                 const start = res?.start
 
-                                const lastPoll = await DatabaseService.lastPollSchedule.Get()
+                                if (!res) return
+
                                 const currentSchedule = res?.schedule
+                                const state = states[currentSchedule.IdKuliah]
+                                const state = states[currentSchedule.IdKuliah]
+
+                                // init if not exists
+                                if (!states[currentSchedule.IdKuliah]) {
+                                    states[currentSchedule.IdKuliah] = {
+                                        started: false,
+                                        finished: false,
+                                        notified: {},
+                                        schedule: currentSchedule
+                                    }
+                                }
 
                                 console.log(`[${tags.Debug}] Current Schedule`)
                                 console.log(`[${tags.Debug}] ${currentSchedule?.IdKuliah} - ${currentSchedule?.MataKuliah}`)
@@ -111,9 +126,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                 console.log(`[${tags.Debug}] Last Schedule`)
                                 console.log(`[${tags.Debug}] ${lastPoll?.data?.IdKuliah} - ${lastPoll?.data?.MataKuliah}`)
 
-                                if (!currentSchedule) {
-                                    return
-                                }
+
 
                                 if (lastPoll?.data?.IdKuliah != currentSchedule.IdKuliah) {
                                     // diff
@@ -145,7 +158,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                     }
                                 }
 
-                                await DatabaseService.lastPollSchedule.Set(currentSchedule)
+                                await DatabaseService.classStates.Set()
                             }
                         }
                     }
