@@ -106,9 +106,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
 
                                 if (!res) return
 
-                                const currentSchedule = res?.schedule
-                                const state = states[currentSchedule.IdKuliah]
-                                const state = states[currentSchedule.IdKuliah]
+                                const currentSchedule = res?.schedule;
 
                                 // init if not exists
                                 if (!states[currentSchedule.IdKuliah]) {
@@ -120,45 +118,43 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                     }
                                 }
 
+                                const state = states[currentSchedule.IdKuliah];
+                                const lastSchedule = state.schedule
+
                                 console.log(`[${tags.Debug}] Current Schedule`)
                                 console.log(`[${tags.Debug}] ${currentSchedule?.IdKuliah} - ${currentSchedule?.MataKuliah}`)
                                 console.log("")
                                 console.log(`[${tags.Debug}] Last Schedule`)
-                                console.log(`[${tags.Debug}] ${lastPoll?.data?.IdKuliah} - ${lastPoll?.data?.MataKuliah}`)
+                                console.log(`[${tags.Debug}] ${lastSchedule?.IdKuliah} - ${lastSchedule?.MataKuliah}`)
 
-
-
-                                if (lastPoll?.data?.IdKuliah != currentSchedule.IdKuliah) {
-                                    // diff
-                                    console.log(`[${tags.Debug}] diff!`)
-
-                                    if (moment().isAfter(start) && moment().isBefore(end)) {
-                                        this.emit("class_started", currentSchedule)
-                                    } else if (moment().isBefore(start)) {
-                                        const diff = moment(start).diff(moment(), "minutes")
-                                        if (diff == 60) {
-                                            // upcomin 1h
-                                            this.emit("class_upcoming_1h", currentSchedule)
-                                        } else if (diff == 30) {
-                                            // upcomin 30m
-                                            this.emit("class_upcoming_30m", currentSchedule)
-                                        } else if (diff == 15) {
-                                            // upcomin 15m
-                                            this.emit("class_upcoming_15m", currentSchedule)
-                                        } else if (diff == 10) {
-                                            // upcoming 10m
-                                            this.emit("class_upcoming_10m", currentSchedule)
-                                        } else if (diff == 5) {
-                                            // upcoming 5m
-                                            this.emit("class_upcoming_5m", currentSchedule)
-                                        }
-                                    } else if (moment().isAfter(end)) {
-                                        // finished
-                                        this.emit("class_finished", currentSchedule)
+                                if (moment().isBetween(start, end) && !state.started) {
+                                    this.emit("class_started", currentSchedule)
+                                    state.started = true
+                                } else if (moment().isBefore(start)) {
+                                    const diff = moment(start).diff(moment(), "minutes")
+                                    if (diff <= 60 && diff > 59 && !state.notified["1h"]) {
+                                        // upcomin 1h
+                                        this.emit("class_upcoming_1h", currentSchedule)
+                                    } else if (diff == 30) {
+                                        // upcomin 30m
+                                        this.emit("class_upcoming_30m", currentSchedule)
+                                    } else if (diff == 15) {
+                                        // upcomin 15m
+                                        this.emit("class_upcoming_15m", currentSchedule)
+                                    } else if (diff == 10) {
+                                        // upcoming 10m
+                                        this.emit("class_upcoming_10m", currentSchedule)
+                                    } else if (diff == 5) {
+                                        // upcoming 5m
+                                        this.emit("class_upcoming_5m", currentSchedule)
                                     }
+                                } else if (moment().isAfter(end) && !state.finished) {
+                                    // finished
+                                    this.emit("class_finished", currentSchedule)
+                                    state.finished = true
                                 }
 
-                                await DatabaseService.classStates.Set()
+                                await DatabaseService.classStates.Set(states)
                             }
                         }
                     }
