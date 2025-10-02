@@ -1,6 +1,6 @@
 <div align="center">
     <h1>Amikom Mahasiswa Dashboard Scrapper</h1>
-    <p>Scraps <a href="https://mhs.amikom.ac.id">mhs.amikom.ac.id</a> using puppetteer. And turn into JSON Object.</p>
+    <p>Scraps <a href="https://mhs.amikom.ac.id">mhs.amikom.ac.id</a> using puppeteer. And turn into JSON Object. Basically it's a wrapper.</p>
 </div>
 
 > [!CAUTION]
@@ -22,8 +22,10 @@ And It's act just like normal students.
 4. Scrap Dashboard
 
 ### Features
-- [x] Get Jadwal Kuliah
+- [x] Get Jadwal Kuliah (1 week)
 - [x] Get Profil Minimal (Name, NPM, pfp)
+- [x] Event Emmiter For Classes
+- [ ] Get Jadwal Kuliah By Day Name
 - [ ] Get Profil Lengkap
 - [ ] Get Info Perkuliahan
 - [ ] Get Amikom Email Domain Information
@@ -35,48 +37,104 @@ And It's act just like normal students.
 
 <hr>
 
-#### Get Jadwal Kuliah
+## Detailed Features
+#### Get Jadwal Kuliah (1 week)
 Usage:
 ```ts
-import { AmikomService } from "./amikom/AmikomService.js";
-const data: ClassSchedules = await AmikomService.mhs.GetClassSchedules()
+const amikom = new AmikomService()
+const data: ClassSchedules = await amikom.mhs.GetClassSchedules()
 ```
 
 Example Response:
 ```ts
-export type ClassSchedules = ClassSchedule[] // Array of ClassSchedule
-
-export interface ClassSchedule {
-    IdHari: 0 | 1 | 2 | 3 | 4 | 5 | 6
-    IdJam: 1 | 2 | 3 | 4 // Sesi
-    IdKuliah: number
-    Keterangan: string
-    Hari: ListHari
-    Ruang: string // normal classroom "x.x.x" | lab room "L x.x.x"
-    Waktu: string
-    Kode: string
-    MataKuliah: string
-    JenisKuliah: "Teori" | "Praktikum"
-    Kelas: string
-    NamaDosen: string
-    IsBolehPresensi: 1 | 0
-}
+[
+    {
+        IdHari: 0,
+        IdJam: 1,
+        IdKuliah: 99999,
+        Keterangan: '',
+        Hari: 'MINGGU',
+        Ruang: '08.73.01',
+        Waktu: '03:00-06:00',
+        Kode: 'SI999',
+        MataKuliah: 'Lorem Ipsum',
+        JenisKuliah: 'Praktek',
+        Kelas: '25S7SI999-LorIp(SI999)',
+        NamaDosen: 'Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.',
+    },
+    // ...
+]
 ```
 
 #### Get Profil Minimal
 Usage:
 ```ts
-const data: FetchMeProp = await AmikomService.mhs.GetMe()
+const amikom = new AmikomService()
+const data: FetchMeProp = await amikom.mhs.GetMe()
 ```
 
 Example Response:
-```ts
-export interface FetchMeProp {
-    krsLabel?: AmikomKRSType | null,
-    krsState?: boolean | null,
-    semesterLabel?: string | null, // Semester - Genap TA. 1970/1971
-    base64pfp?: string | null, // long string of base64
-    name?: string | null, // Prof.Dr.Ir. Mas Depan S.Kom.M.Kom
-    npm?: string | null, // 25.12.9999
+```sh
+{
+    krsLabel: "Aktif",
+    krsState: true,
+    semesterLabel: "Semester - Genap TA. 1970/1971",
+    base64pfp: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUSZsaXN0PVJEZFF3NHc5V2dYY1Emc3RhcnRfcmFkaW89MQ==",
+    name: "Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.",
+    npm: "25.12.9999",
 }
+```
+
+#### Event Emmiter For Classes
+Usage:
+```ts
+const amikom = new AmikomService()
+
+// Will trigger when class is started
+amikom.on("class_started", (classData: ClassSchedule) => {
+    console.log(`[${tags.Amikom}] Class Started!`)
+    console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
+})
+
+// Will trigger when class start in 10 minutes
+amikom.on("class_upcoming_10m", (classData: ClassSchedule) => {
+    console.log(`[${tags.Amikom}] Class In 10m!`)
+    console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
+})
+
+// Will trigger when class start in 15 minutes
+amikom.on("class_upcoming_15m", (classData: ClassSchedule) => {
+    console.log(`[${tags.Amikom}] Class In 15m!`)
+    console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
+})
+
+// Will trigger when class start in 30 minutes
+amikom.on("class_upcoming_30m", (classData: ClassSchedule) => {
+    console.log(`[${tags.Amikom}] Class In 30m!`)
+    console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
+})
+
+// Will trigger when class start in 1 hour
+amikom.on("class_upcoming_1h", (classData: ClassSchedule) => {
+    console.log(`[${tags.Amikom}] Class In 1h!`)
+    console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
+})
+
+// Will trigger when class is finished
+amikom.on("class_finished", (classData: ClassSchedule) => {
+    console.log(`[${tags.Amikom}] Class Ended!`)
+    console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
+})
+
+// Will trigger when there is error.
+amikom.on("error", (e: any) => {
+    console.log(`[${tags.Amikom}] AmikomService Error`)
+    console.error(e)
+})
+```
+
+Example Response:
+```sh
+[Amikom] Class Started!
+[Amikom] 26S7SI99-MiAyam(SI999) - Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.
 ```
