@@ -19,5 +19,5 @@ export async function ConvertDayNameToDate(schedule: ClassSchedule) {
     const start = moment(classDate.format("YYYY-MM-DD") + " " + startTime, "YYYY-MM-DD HH:mm");
     const end = moment(classDate.format("YYYY-MM-DD") + " " + endTime, "YYYY-MM-DD HH:mm");
 
-    return { classDate, start, end }
+    return { classDate, schedule, start, end }
 }

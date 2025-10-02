@@ -1,5 +1,5 @@
 import { EventEmitter } from "events"
-import { DatabaseClassSchedules, DatabaseMeProp, DatabaseService } from "../database/DatabaseService.js"
+import { DatabaseClassSchedulesProp, DatabaseMeProp, DatabaseService } from "../database/DatabaseService.js"
 import AmikomClient from "./AmikomClient.js"
 import { sleep } from "../utils/Sleep.js";
 import { GetTodayISOWeekday } from "../utils/GetTodayISOWeekday.js";
@@ -30,7 +30,7 @@ export class AmikomService extends EventEmitter {
 
             return cache
         },
-        GetClassSchedules: async (): Promise<DatabaseClassSchedules | null> => {
+        GetClassSchedules: async (): Promise<DatabaseClassSchedulesProp | null> => {
             const cache = await DatabaseService.classSchedules.Get()
 
             if (!cache) {
@@ -72,24 +72,33 @@ export class AmikomService extends EventEmitter {
                             const end = res?.end
                             const start = res?.start
 
-                            if (moment().isAfter(start) && moment().isBefore(end)) {
-                                
-                            } else if (moment().isBefore(start)) {
-                                const diff = moment(start).diff(moment(), "minutes")
-                                if (diff == 60) {
-                                    // upcomin 1h
-                                } else if (diff == 30) {
-                                    // upcomin 30m
-                                } else if (diff == 15) {
-                                    // upcomin 15m
-                                } else if (diff == 10) {
-                                    // upcoming 10m
-                                } else if (diff == 5) {
-                                    // upcoming 5m
+                            const lastPoll = await DatabaseService.lastPollSchedule.Get()
+                            const currentSchedule
+
+                            if (lastPoll?.data?.IdKuliah != res?.schedule.IdKuliah) {
+                                // diff
+
+                                if (moment().isAfter(start) && moment().isBefore(end)) {
+                                    // happening
+                                } else if (moment().isBefore(start)) {
+                                    const diff = moment(start).diff(moment(), "minutes")
+                                    if (diff == 60) {
+                                        // upcomin 1h
+                                    } else if (diff == 30) {
+                                        // upcomin 30m
+                                    } else if (diff == 15) {
+                                        // upcomin 15m
+                                    } else if (diff == 10) {
+                                        // upcoming 10m
+                                    } else if (diff == 5) {
+                                        // upcoming 5m
+                                    }
+                                } else if (moment().isAfter(end)) {
+                                    // finished
                                 }
-                            } else if (moment().isAfter(end)) {
-                                // finished
                             }
+
+                            await DatabaseService.lastPollSchedule.Set(res?.schedule)
                         }
                     }
                 }

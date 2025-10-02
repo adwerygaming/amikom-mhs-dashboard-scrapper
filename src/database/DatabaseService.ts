@@ -16,24 +16,23 @@ export interface DatabaseClassSchedulesProp {
 }
 
 export interface LastPollScheduleProp {
-    
+    data: ClassSchedule | null
 }
 
 export const DatabaseService = {
     lastPollSchedule: {
-        Get: async (): Promise<DatabaseMeProp | null> => {
-            let data: DatabaseMeProp | null = await AmikomDB.get("lastPollSchedule")
+        Get: async (): Promise<LastPollScheduleProp | null> => {
+            let data: ClassSchedule | null = await AmikomDB.get("lastPollSchedule")
 
-            return data
+            return { data }
         },
-        Set: async (data: ClassSchedule): Promise<DatabaseMeProp> => {
+        Set: async (data: ClassSchedule): Promise<LastPollScheduleProp> => {
             await AmikomDB.set("lastPollSchedule", data)
 
-            return true
+            return { data }
         },
         Delete: async (): Promise<boolean> => {
             await AmikomDB.delete("me")
-
             return true
         }
     },
@@ -71,8 +70,8 @@ export const DatabaseService = {
         }
     },
     classSchedules: {
-        Get: async (): Promise<DatabaseClassSchedules | null> => {
-            let data: DatabaseClassSchedules | null = await AmikomDB.get("classSchedules")
+        Get: async (): Promise<DatabaseClassSchedulesProp | null> => {
+            let data: DatabaseClassSchedulesProp | null = await AmikomDB.get("classSchedules")
 
             // Expiry check
             const expiredAt = data?.expiredAt
@@ -86,7 +85,7 @@ export const DatabaseService = {
 
             return data
         },
-        Set: async (data: ClassSchedules): Promise<DatabaseClassSchedules> => {
+        Set: async (data: ClassSchedules): Promise<DatabaseClassSchedulesProp> => {
             const obj = {
                 data,
                 expiredAt: moment().add(1, "day").toISOString(),
