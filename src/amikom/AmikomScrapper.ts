@@ -141,7 +141,7 @@ export class AmikomScrapper {
     async FetchClassSchedule(): Promise<GetClassScheduleResponse> {
         const page = await BrowserService.NewPage()
 
-        console.log(`[${tags.Amikom}] GetClassSchedule: Fetching API`)
+        console.log(`[${tags.Amikom}] FetchClassSchedule: Fetching API`)
 
         await page.goto(AmikomEndpoints.api.classSchedule, { waitUntil: "load" })
 

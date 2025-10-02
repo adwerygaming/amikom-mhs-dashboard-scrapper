@@ -135,18 +135,23 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                     if (diff <= 60 && diff > 59 && !state.notified["1h"]) {
                                         // upcomin 1h
                                         this.emit("class_upcoming_1h", currentSchedule)
-                                    } else if (diff == 30) {
+                                        state.notified["1h"] = true;
+                                    } else if (diff <= 30 && diff > 29 && !state.notified["30m"]) {
                                         // upcomin 30m
                                         this.emit("class_upcoming_30m", currentSchedule)
-                                    } else if (diff == 15) {
+                                        state.notified["30m"] = true;
+                                    } else if (diff <= 15 && diff > 14 && !state.notified["15m"]) {
                                         // upcomin 15m
                                         this.emit("class_upcoming_15m", currentSchedule)
-                                    } else if (diff == 10) {
+                                        state.notified["15m"] = true;
+                                    } else if (diff <= 10 && diff > 9 && !state.notified["10m"]) {
                                         // upcoming 10m
                                         this.emit("class_upcoming_10m", currentSchedule)
-                                    } else if (diff == 5) {
+                                        state.notified["10m"] = true;
+                                    } else if (diff <= 5 && diff > 4 && !state.notified["5m"]) {
                                         // upcoming 5m
                                         this.emit("class_upcoming_5m", currentSchedule)
+                                        state.notified["5m"] = true;
                                     }
                                 } else if (moment().isAfter(end) && !state.finished) {
                                     // finished
