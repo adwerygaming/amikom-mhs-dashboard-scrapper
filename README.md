@@ -79,7 +79,7 @@ Example Response:
     krsLabel: "Aktif",
     krsState: true,
     semesterLabel: "Semester - Genap TA. 1970/1971",
-    base64pfp: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUSZsaXN0PVJEZFF3NHc5V2dYY1Emc3RhcnRfcmFkaW89MQ==",
+    base64pfp: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==",
     name: "Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.",
     npm: "25.12.9999",
 }
