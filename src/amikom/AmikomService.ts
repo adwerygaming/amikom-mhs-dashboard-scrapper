@@ -8,7 +8,9 @@ import { ConvertDayNameToDate } from "../utils/ConvertDayNameToDate.js";
 import moment from "moment-timezone";
 import { ClassSchedule } from "../types/AmikomTypes.js";
 
-interface AmikomServiceEvents {
+import TypedEmitter from "typed-emitter"
+
+type AmikomServiceEvents {
     class_started: ClassSchedule
     class_upcoming_1h: ClassSchedule
     class_upcoming_30m: ClassSchedule
@@ -17,23 +19,6 @@ interface AmikomServiceEvents {
     class_upcoming_5m: ClassSchedule
     class_finished: ClassSchedule
     error: any
-}
-
-class TypedEmitter<T> {
-    private ee = new EventEmitter();
-
-    on<K extends keyof T>(event: K, listener: (arg: T[K]) => void): this {
-        this.ee.on(event as string, listener);
-        return this;
-    }
-
-    emit<K extends keyof T>(event: K, arg: T[K]): boolean {
-        return this.ee.emit(event as string, arg);
-    }
-
-    eventNames(): (keyof T)[] {
-        return this.ee.eventNames() as (keyof T)[];
-    }
 }
 
 export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
