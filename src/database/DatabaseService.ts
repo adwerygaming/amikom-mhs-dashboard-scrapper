@@ -1,5 +1,5 @@
 import moment from "moment-timezone"
-import { ClassSchedules, FetchMeProp } from "../types/AmikomTypes.js"
+import { ClassSchedule, ClassSchedules, FetchMeProp } from "../types/AmikomTypes.js"
 import AmikomDB from "./Koneksi.js"
 import AmikomClient from "../amikom/AmikomClient.js"
 
@@ -9,13 +9,34 @@ export interface DatabaseMeProp {
     lastModified: string,
 }
 
-export interface DatabaseClassSchedules {
+export interface DatabaseClassSchedulesProp {
     data: ClassSchedules,
     expiredAt: string,
     lastModified: string,
 }
 
+export interface LastPollScheduleProp {
+    
+}
+
 export const DatabaseService = {
+    lastPollSchedule: {
+        Get: async (): Promise<DatabaseMeProp | null> => {
+            let data: DatabaseMeProp | null = await AmikomDB.get("lastPollSchedule")
+
+            return data
+        },
+        Set: async (data: ClassSchedule): Promise<DatabaseMeProp> => {
+            await AmikomDB.set("lastPollSchedule", data)
+
+            return true
+        },
+        Delete: async (): Promise<boolean> => {
+            await AmikomDB.delete("me")
+
+            return true
+        }
+    },
     me: {
         Get: async (): Promise<DatabaseMeProp | null> => {
             let data: DatabaseMeProp | null = await AmikomDB.get("me")
