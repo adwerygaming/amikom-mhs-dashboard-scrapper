@@ -19,10 +19,16 @@ interface AmikomServiceEvents {
 }
 
 class TypedEmmiter<T> extends EventEmitter {
-    on<K extends 
+    on<K extends keyof T>(event: K, listener: (arg: T[K]) => void): this {
+        return super.on(event as string, listener)
+    }
+
+    emit<K extends keyof T>(event: K, arg: T[K]): boolean {
+        return super.emit(event as string, arg)
+    }
 }
 
-export class AmikomService extends EventEmitter {
+export class AmikomService extends TypedEmmiter<AmikomServiceEvents> {
     constructor() {
         super();
         this.startPolling()
