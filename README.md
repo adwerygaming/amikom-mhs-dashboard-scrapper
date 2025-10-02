@@ -1,6 +1,6 @@
 <div align="center">
-    <h1>Amikom Mahasiswa Dashboard Scrapper</h1>
-    <p>Scraps <a href="https://mhs.amikom.ac.id">mhs.amikom.ac.id</a> using puppeteer. And turn into JSON Object. Basically it's a wrapper.</p>
+    <h1>Amikom Mahasiswa API Wrapper</h1>
+    <p>Scraps <a href="https://mhs.amikom.ac.id">mhs.amikom.ac.id</a> using puppeteer, and turn into JSON Object. That is Basically a wrapper.</p>
 </div>
 
 > [!CAUTION]
@@ -22,6 +22,7 @@ And It's act just like normal students.
 4. Scrap Dashboard
 
 ### Features
+- [x] Login (Automated)
 - [x] Get Jadwal Kuliah (1 week)
 - [x] Get Profil Minimal (Name, NPM, pfp)
 - [x] Event Emmiter For Classes
@@ -35,9 +36,25 @@ And It's act just like normal students.
 - [ ] Login With Amikom Email Domain
 - [ ] Login With Cookies
 
-<hr>
 
 ## Detailed Features
+#### Login (automated)
+Usage:
+```ts
+const AmikomClient = new AmikomScrapper(npm, pw)
+const { status, loginStrategy } = await AmikomClient.Login()
+
+console.log(`[${tags.Amikom}] Login Status: ${status} | Using Strategy: ${loginStrategy}`)
+```
+
+Example Response:
+```sh
+[Amikom] Login Status: success | Using Strategy: manual
+[Amikom] Login Status: success | Using Strategy: cookie
+[Amikom] Login Status: failed
+```
+
+
 #### Get Jadwal Kuliah (1 week)
 Usage:
 ```ts
