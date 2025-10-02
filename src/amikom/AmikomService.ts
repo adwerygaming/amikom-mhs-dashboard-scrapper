@@ -6,6 +6,21 @@ import { GetTodayISOWeekday } from "../utils/GetTodayISOWeekday.js";
 import tags from "../utils/Tags.js";
 import { ConvertDayNameToDate } from "../utils/ConvertDayNameToDate.js";
 import moment from "moment-timezone";
+import { ClassSchedule } from "../types/AmikomTypes.js";
+
+interface AmikomServiceEvents {
+    class_started: ClassSchedule
+    class_upcoming_1h: ClassSchedule
+    class_upcoming_30m: ClassSchedule
+    class_upcoming_15m: ClassSchedule
+    class_upcoming_10m: ClassSchedule
+    class_upcoming_5m: ClassSchedule
+    class_finished: ClassSchedule
+}
+
+class TypedEmmiter<T> extends EventEmitter {
+    on<K extends 
+}
 
 export class AmikomService extends EventEmitter {
     constructor() {
@@ -68,37 +83,50 @@ export class AmikomService extends EventEmitter {
                             todaySchedules.map(async (x) => await ConvertDayNameToDate(x))
                         )
 
-                        for (const res of results) {
-                            const end = res?.end
-                            const start = res?.start
+                        if (results && results.length > 0) {
+                            for (const res of results) {
+                                const end = res?.end
+                                const start = res?.start
 
-                            const lastPoll = await DatabaseService.lastPollSchedule.Get()
-                            const currentSchedule
+                                const lastPoll = await DatabaseService.lastPollSchedule.Get()
+                                const currentSchedule = res?.schedule
 
-                            if (lastPoll?.data?.IdKuliah != res?.schedule.IdKuliah) {
-                                // diff
-
-                                if (moment().isAfter(start) && moment().isBefore(end)) {
-                                    // happening
-                                } else if (moment().isBefore(start)) {
-                                    const diff = moment(start).diff(moment(), "minutes")
-                                    if (diff == 60) {
-                                        // upcomin 1h
-                                    } else if (diff == 30) {
-                                        // upcomin 30m
-                                    } else if (diff == 15) {
-                                        // upcomin 15m
-                                    } else if (diff == 10) {
-                                        // upcoming 10m
-                                    } else if (diff == 5) {
-                                        // upcoming 5m
-                                    }
-                                } else if (moment().isAfter(end)) {
-                                    // finished
+                                if (!currentSchedule) {
+                                    return
                                 }
-                            }
 
-                            await DatabaseService.lastPollSchedule.Set(res?.schedule)
+                                if (lastPoll?.data?.IdKuliah != currentSchedule.IdKuliah) {
+                                    // diff
+
+                                    if (moment().isAfter(start) && moment().isBefore(end)) {
+                                        this.emit("class_started", currentSchedule)
+                                    } else if (moment().isBefore(start)) {
+                                        const diff = moment(start).diff(moment(), "minutes")
+                                        if (diff == 60) {
+                                            // upcomin 1h
+                                            this.emit("class_upcoming_1h", currentSchedule)
+                                        } else if (diff == 30) {
+                                            // upcomin 30m
+                                            this.emit("class_upcoming_30m", currentSchedule)
+                                        } else if (diff == 15) {
+                                            // upcomin 15m
+                                            this.emit("class_upcoming_15m", currentSchedule)
+                                        } else if (diff == 10) {
+                                            // upcoming 10m
+                                            this.emit("class_upcoming_10m", currentSchedule)
+                                        } else if (diff == 5) {
+                                            // upcoming 5m
+                                            this.emit("class_upcoming_5m", currentSchedule)
+                                        }
+                                    } else if (moment().isAfter(end)) {
+                                        // finished
+                                            this.emit("class_finished", currentSchedule)
+
+                                    }
+                                }
+
+                                await DatabaseService.lastPollSchedule.Set(currentSchedule)
+                            }
                         }
                     }
                 }
