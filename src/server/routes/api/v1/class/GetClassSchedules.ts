@@ -9,7 +9,8 @@ export default {
         path: "/"
     },
     execute: async (_req: Request, res: Response) => {
-        const data = await AmikomService.mhs.GetClassSchedules()
+        const amikom = new AmikomService()
+        const data = await amikom.mhs.GetClassSchedules()
 
         const response: ResponseSchema<typeof data> = {
             code: 200,
