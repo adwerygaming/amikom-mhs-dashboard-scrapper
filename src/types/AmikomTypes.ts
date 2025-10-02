@@ -65,6 +65,7 @@ export interface GetClassScheduleResponse {
 
 export type ClassSchedules = ClassSchedule[]
 
+// Removed sensitive & useless fields
 export interface ClassSchedule {
     IdHari: 0 | 1 | 2 | 3 | 4 | 5 | 6
     IdJam: 1 | 2 | 3 | 4 // Sesi
@@ -73,16 +74,10 @@ export interface ClassSchedule {
     Hari: ListHari
     Ruang: string // normal classroom "x.x.x" | lab room "L x.x.x"
     Waktu: string
-    ZoomURL: string | "-"
-    IsZoomURL: 1 | 0
     Kode: string
     MataKuliah: string
     JenisKuliah: "Teori" | "Praktikum"
     Kelas: string
-    Nik: string
     NamaDosen: string
-    EmailDosen: string
     IsBolehPresensi: 1 | 0
-    KodePresensi: string
-    Jenjang: "S1" | "S2" | "S3" | "S4" | "S5" | "D3"
 }
