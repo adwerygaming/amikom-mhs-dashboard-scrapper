@@ -85,7 +85,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
 
                 if (getClassSchedule) {
                     const latestSchedules = getClassSchedule.data;
-                    const todayName = await GetTodayISOWeekday()
+                    const todayName = await GetTodayISOWeekday(5)
                     const todaySchedules = latestSchedules.filter((x) => x.Hari.toUpperCase() == todayName.toUpperCase())
 
                     if (todaySchedules) {

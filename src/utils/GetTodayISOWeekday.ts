@@ -20,8 +20,8 @@ export const dayIndexToStringMap: Record<number, string> = {
     7: "MINGGU",
 };
 
-export async function GetTodayISOWeekday() {
-    const todayNumber = moment().isoWeekday();
+export async function GetTodayISOWeekday(manual?: number) {
+    const todayNumber = manual ?? moment().isoWeekday();
 
     const todayName = dayIndexToStringMap[todayNumber];
 
