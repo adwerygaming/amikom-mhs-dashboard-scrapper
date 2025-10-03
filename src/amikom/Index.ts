@@ -39,4 +39,6 @@ amikom.on("class_upcoming_1h", (classData) => {
     console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
 })
 
-amikom.mhs.GetClassByDay({ day: Days.SENIN })
+const ClassesOnMonday = await amikom.mhs.GetClassByDay({ day: Days.SENIN })
+
+console.log(skejul)

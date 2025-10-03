@@ -39,6 +39,10 @@ And It's act just like normal students.
 
 ## Detailed Features
 #### Login (automated)
+
+> [!IMPORTANT]
+> Make sure you have filled `.env.example`, rename it to `.env`.
+
 Usage:
 ```ts
 const AmikomClient = new AmikomScrapper(npm, pw)
@@ -63,7 +67,7 @@ const data: ClassSchedules = await amikom.mhs.GetClassSchedules()
 ```
 
 Example Response:
-```ts
+```sh
 [
     {
         IdHari: 0,
