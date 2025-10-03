@@ -36,6 +36,9 @@ class TypedEmitter<T> {
     }
 }
 
+// set specific time for testing
+const momentNode = moment()//.hour(15).minute(0)
+
 export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
     constructor() {
         super();
@@ -119,19 +122,14 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                 }
 
                                 const state = states[currentSchedule.IdKuliah];
-                                const lastSchedule = state.schedule
 
-                                console.log(`[${tags.Debug}] Current Schedule`)
-                                console.log(`[${tags.Debug}] ${currentSchedule?.IdKuliah} - ${currentSchedule?.MataKuliah}`)
-                                console.log("")
-                                console.log(`[${tags.Debug}] Last Schedule`)
-                                console.log(`[${tags.Debug}] ${lastSchedule?.IdKuliah} - ${lastSchedule?.MataKuliah}`)
+                                console.log(`[${tags.Debug}] ${currentSchedule?.IdKuliah} - ${currentSchedule?.MataKuliah} will starts in ${moment(start).diff(momentNode, "minutes")} minutes [${start?.format("HH:mm")}]`)
 
-                                if (moment().isBetween(start, end) && !state.started) {
+                                if (momentNode.isBetween(start, end) && !state.started) {
                                     this.emit("class_started", currentSchedule)
                                     state.started = true
-                                } else if (moment().isBefore(start)) {
-                                    const diff = moment(start).diff(moment(), "minutes")
+                                } else if (momentNode.isBefore(start)) {
+                                    const diff = moment(start).diff(momentNode, "minutes")
                                     if (diff <= 60 && diff > 30 && !state.notified["1h"]) {
                                         // upcomin 1h
                                         this.emit("class_upcoming_1h", currentSchedule)
@@ -153,7 +151,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                                         this.emit("class_upcoming_5m", currentSchedule)
                                         state.notified["5m"] = true;
                                     }
-                                } else if (moment().isAfter(end) && !state.finished) {
+                                } else if (momentNode.isAfter(end) && !state.finished) {
                                     // finished
                                     this.emit("class_finished", currentSchedule)
                                     state.finished = true
@@ -168,7 +166,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                 this.emit('error', e)   
             }
 
-            await sleep(60000 * 1) // pause for 1m
+            await sleep(5000) // pause for 5s
         }
     }
 }
