@@ -2,7 +2,7 @@ import { EventEmitter } from "events"
 import { DatabaseClassSchedulesProp, DatabaseMeProp, DatabaseService } from "../database/DatabaseService.js"
 import AmikomClient from "./AmikomClient.js"
 import { sleep } from "../utils/Sleep.js";
-import { GetTodayISOWeekday } from "../utils/GetTodayISOWeekday.js";
+import { dayStringToIndexMap, GetTodayISOWeekday } from "../utils/GetTodayISOWeekday.js";
 import tags from "../utils/Tags.js";
 import { ConvertDayNameToDate } from "../utils/ConvertDayNameToDate.js";
 import moment from "moment-timezone";
@@ -39,6 +39,8 @@ class TypedEmitter<T> {
 // set specific time for testing
 const momentNode = moment()//.hour(15).minute(0)
 
+interface Get
+
 export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
     constructor() {
         super();
@@ -46,7 +48,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
     }
 
     public mhs = {
-        GetMe: async (): Promise<DatabaseMeProp | null> => {
+        async GetMe(): Promise<DatabaseMeProp | null> {
             const cache = await DatabaseService.me.Get()
 
             if (!cache) {
@@ -62,7 +64,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
 
             return cache
         },
-        GetClassSchedules: async (): Promise<DatabaseClassSchedulesProp | null> => {
+        async GetClassSchedules(): Promise<DatabaseClassSchedulesProp | null> {
             const cache = await DatabaseService.classSchedules.Get()
 
             if (!cache) {
@@ -77,6 +79,9 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
             }
 
             return cache
+        },
+        async GetClassByDay({  }) {
+            
         }
     }
 

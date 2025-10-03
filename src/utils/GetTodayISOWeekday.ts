@@ -8,7 +8,7 @@ export const dayStringToIndexMap: Record<string, number> = {
     JUMAT: 5,
     SABTU: 6,
     MINGGU: 7,
-};
+} as const;
 
 export const dayIndexToStringMap: Record<number, string> = {
     1: "SENIN",
@@ -18,7 +18,7 @@ export const dayIndexToStringMap: Record<number, string> = {
     5: "JUMAT",
     6: "SABTU",
     7: "MINGGU",
-};
+} as const;
 
 export async function GetTodayISOWeekday(manual?: number) {
     const todayNumber = manual ?? moment().isoWeekday();
