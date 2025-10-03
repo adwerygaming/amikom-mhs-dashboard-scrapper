@@ -18,7 +18,7 @@ Since the dashboard dosen't have any REST API, scrap is the only way.
 And It's act just like normal students.
 1. Open <a href="https://mhs.amikom.ac.id">mhs.amikom.ac.id</a>
 2. Login with Student NPM & Password
-3. Solve Captcha using Monstercap
+3. Automatically Solve Captcha using Capmonster
 4. Scrap Dashboard
 
 ### Features
@@ -26,7 +26,7 @@ And It's act just like normal students.
 - [x] Get Jadwal Kuliah (1 week)
 - [x] Get Profil Minimal (Name, NPM, pfp)
 - [x] Event Emmiter For Classes
-- [ ] Get Jadwal Kuliah By Day Name
+- [x] Get Jadwal Kuliah By Day Name
 - [ ] Get Profil Lengkap
 - [ ] Get Info Perkuliahan
 - [ ] Get Amikom Email Domain Information
@@ -155,3 +155,6 @@ Example Response:
 [Amikom] Class Started!
 [Amikom] 26S7SI99-MiAyam(SI999) - Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.
 ```
+
+### Support
+If you see this project is cool or helpful, consider leave a star 🌟, it would help me get motivated on coding. Thank you! :3

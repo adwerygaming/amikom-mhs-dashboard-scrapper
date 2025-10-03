@@ -83,13 +83,17 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
             return cache
         },
         async GetClassByDay({ day }: GetClassByDayProp) {
-            const schedulles = this.GetClassSchedules()
+            if (!day) return []
+
+            const schedulles = await this.GetClassSchedules()
 
             if (!schedulles) {
                 return []
             }
 
-            const selectedClasses = 
+            const selectedClasses = schedulles.data.filter((x) => x?.Hari?.toUpperCase() == day?.toUpperCase()) ?? []
+
+            return selectedClasses
         }
     }
 
