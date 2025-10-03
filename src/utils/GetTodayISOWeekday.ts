@@ -10,6 +10,16 @@ export const dayStringToIndexMap: Record<string, number> = {
     MINGGU: 7,
 } as const;
 
+export const enum Days {
+    SENIN = "SENIN",
+    SELASA = "SELASA",
+    RABU = "RABU",
+    KAMIS = "KAMIS",
+    JUMAT = "JUMAT",
+    SABTU = "SABTU",
+    MINGGU = "MINGGU",
+}
+
 export const dayIndexToStringMap: Record<number, string> = {
     1: "SENIN",
     2: "SELASA",

@@ -1,3 +1,4 @@
+import { Days } from "../utils/GetTodayISOWeekday.js";
 import tags from "../utils/Tags.js";
 import { AmikomService } from "./AmikomService.js";
 
@@ -37,3 +38,5 @@ amikom.on("class_upcoming_1h", (classData) => {
     console.log(`[${tags.Amikom}] Class In 1h!`)
     console.log(`[${tags.Amikom}] ${classData.Kelas} - ${classData.NamaDosen}`)
 })
+
+amikom.mhs.GetClassByDay({ day: Days.SENIN })
