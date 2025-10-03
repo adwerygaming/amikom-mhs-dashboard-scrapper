@@ -58,7 +58,7 @@ export type ListHari = "SENIN" | "SELASA" | "RABU" | "KAMIS" | "JUMAT"
 
 export type RawClassScheduleResponse = ClassSchedule[] | { Message: string };
 
-export interface GetClassScheduleResponse { 
+export interface FetchClassScheduleResponse { 
     status: AmikomServiceStatuses,
     data: ClassSchedule[] | null
 }

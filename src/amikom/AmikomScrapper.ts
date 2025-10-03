@@ -2,7 +2,7 @@ import { sleep } from "../utils/Sleep.js";
 import { BrowserService } from "../browser/BrowserService.js"
 import tags from "../utils/Tags.js";
 import { Page } from "puppeteer";
-import { AmikomEndpoints, AmikomKRSType, FetchMeResponse, GetClassScheduleResponse, LoginResponse, RawClassScheduleResponse } from "../types/AmikomTypes.js";
+import { AmikomEndpoints, AmikomKRSType, FetchMeResponse, FetchClassScheduleResponse, LoginResponse, RawClassScheduleResponse } from "../types/AmikomTypes.js";
 import { _dirname } from "../utils/Path.js";
 
 // find "Dashboard Mahasiswa" text.
@@ -138,7 +138,7 @@ export class AmikomScrapper {
         }
     }
 
-    async FetchClassSchedule(): Promise<GetClassScheduleResponse> {
+    async FetchClassSchedule(): Promise<FetchClassScheduleResponse> {
         const page = await BrowserService.NewPage()
         const isLoggedIn = await this.CheckLogin(page)
 
