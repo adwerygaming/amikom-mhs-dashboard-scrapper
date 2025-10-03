@@ -160,5 +160,48 @@ Example Response:
 [Amikom] 26S7SI99-MiAyam(SI999) - Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.
 ```
 
+### Get Jadwal Kuliah By Day Name
+Usage:
+```ts
+const ClassesOnMonday = await amikom.mhs.GetClassByDay({ day: Days.SENIN })
+
+console.log(ClassesOnMonday)
+```
+
+Example Response:
+```sh
+[
+    {
+        IdHari: 0,
+        IdJam: 1,
+        IdKuliah: 99999,
+        Keterangan: 'Rust blazingly fazttttt ⚡⚡⚡⚡',
+        Hari: 'SENIN',
+        Ruang: '08.73.01',
+        Waktu: '07:00-07:15',
+        Kode: 'SI999',
+        MataKuliah: 'Ngoding Rust',
+        JenisKuliah: 'Praktek',
+        Kelas: '25S7SI999-NgoRust(SI999)',
+        NamaDosen: 'Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.',
+    },
+    {
+        IdHari: 0,
+        IdJam: 1,
+        IdKuliah: 99999,
+        Keterangan: '',
+        Hari: 'SENIN',
+        Ruang: '08.73.01',
+        Waktu: '07:15-15:00',
+        Kode: 'SI999',
+        MataKuliah: 'Scroll Pesnuk',
+        JenisKuliah: 'Praktek',
+        Kelas: '25S7SI999-ScrPns(SI999)',
+        NamaDosen: 'Prof. Dr. Ir. H. Dhevan Adhitya P, S.Kom., M.Kom., M.Sc., M.Eng., MBA., M.Pd., Spd., Ph.D., LL.M., CIPM., CISA., PMP.',
+    },
+    // ...
+]
+```
+
 ### Support
 If you see this project is cool or helpful, consider leave a star 🌟, it would help me get motivated on coding. Thank you! :3
