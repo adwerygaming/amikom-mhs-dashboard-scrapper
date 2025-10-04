@@ -60,6 +60,7 @@ export class AmikomScrapper {
     }
 
     async Login(): Promise<LoginResponse> {
+        const CheckLogin = this.CheckLogin()
         const page = await BrowserService.NewPage()
 
         console.log(`[${tags.Amikom}] Login: Opening Login Page.`)
@@ -127,11 +128,12 @@ export class AmikomScrapper {
         // expected url to change (to dashboard)
         // then close & send data
         try {
-            await page.waitForNavigation({ waitUntil: "load", timeout: 8000 })
+            console.log(`[${tags.Error}] Waiting for redirect...`)
+            await page.waitForNavigation({ waitUntil: "load", timeout: 12000 })
             await sleep(700);
             return { status: "success", loginStrategy: dashboardMahastudentTextExist ? "cookie" : "manual" }
         } catch (e) {
-            console.log(`[${tags.Debug}] Logged in, but didnt get redirected.`)
+            console.log(`[${tags.Error}] Logged in, but didnt get redirected.`)
             return { status: "failed" }
         } finally {
             await BrowserService.ClosePage(page)
@@ -163,8 +165,6 @@ export class AmikomScrapper {
             return JSON.parse(el.textContent || "[]")
         });
 
-        await BrowserService.ClosePage(page)
-
         if ("Message" in res) {
             // Possible denied
             if (res.Message.toLowerCase().includes("Authorization has been denied")) {
@@ -172,16 +172,16 @@ export class AmikomScrapper {
                 return { status: "denied", data: []}
             }
 
-            // await BrowserService.ClosePage(page)
+            await BrowserService.ClosePage(page)
             return { status: "failed", data: null };
         } else {
             if (!(res?.[0]?.Kode)) {
-                // await BrowserService.ClosePage(page)
+                await BrowserService.ClosePage(page)
                 return { status: "failed", data: null };
             }
 
             // Possible subjects
-            // await BrowserService.ClosePage(page)
+            await BrowserService.ClosePage(page)
             return { status: "success", data: res };
         }
     }
