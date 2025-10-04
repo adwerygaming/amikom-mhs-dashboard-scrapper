@@ -7,6 +7,7 @@ import tags from "../utils/Tags.js";
 import { ConvertDayNameToDate } from "../utils/ConvertDayNameToDate.js";
 import moment from "moment-timezone";
 import { ClassSchedule } from "../types/AmikomTypes.js";
+import { env } from "../utils/EnvManager.js";
 
 type AmikomServiceEvents = {
     class_started: ClassSchedule,
@@ -109,9 +110,9 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                     const todaySchedules = latestSchedules.filter((x) => x.Hari.toUpperCase() == todayName.toUpperCase())
 
                     if (todaySchedules) {
-                        console.log(`[${tags.Debug}] Today schedulle:`)
-                        console.log(`[${tags.Debug}] todayName: ${todayName}`)
-                        console.log(todaySchedules)
+                        // console.log(`[${tags.Debug}] Today schedulle:`)
+                        // console.log(`[${tags.Debug}] todayName: ${todayName}`)
+                        // console.log(todaySchedules)
 
                         const results = await Promise.all(
                             todaySchedules.map(async (x) => await ConvertDayNameToDate(x))
@@ -183,7 +184,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                 this.emit('error', e)   
             }
 
-            await sleep(5000) // pause for 5s
+            await sleep(Number(env.POLLING_INTERVAL) ?? 5000) // pause for 5s
         }
     }
 }

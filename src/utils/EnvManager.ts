@@ -9,7 +9,9 @@ const envSchema = z.object({
     AMIKOM_PASSWORD: z.string().optional(),
     CAPMONSTER_TOKEN: z.string().optional(),
     SERVER_IP: z.string().optional(),
-    SERVER_PORT: z.string().optional()
+    SERVER_PORT: z.string().optional(),
+    POLLING_INTERVAL: z.string().optional(),
+    CACHE_TTL: z.string().optional()
 })
 
 const envParsed = envSchema.safeParse(process.env)

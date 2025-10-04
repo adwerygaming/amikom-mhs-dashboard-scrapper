@@ -2,6 +2,7 @@ import moment from "moment-timezone"
 import { ClassSchedule, ClassSchedules, FetchMeProp } from "../types/AmikomTypes.js"
 import AmikomDB from "./Koneksi.js"
 import AmikomClient from "../amikom/AmikomClient.js"
+import { env } from "../utils/EnvManager.js"
 
 export interface DatabaseMeProp {
     data: FetchMeProp,
@@ -26,7 +27,7 @@ export interface ClassState {
     schedule: ClassSchedule
 }
 
-const expiredAt = moment().add(5, "minutes").toISOString()
+const expiredAt = moment().add(Number(env.CACHE_TTL), "seconds").toISOString()
 
 export const DatabaseService = {
     classStates: {
