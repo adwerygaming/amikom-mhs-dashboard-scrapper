@@ -58,6 +58,8 @@ export const DatabaseService = {
 
                 if (status == "success") {
                     data = await DatabaseService.me.Set(rest)
+                } else {
+                    return null
                 }
             }
 
@@ -90,8 +92,11 @@ export const DatabaseService = {
                 console.log(`[${tags.Debug}] classSchedules is expired. [${expiredAt}]`)
                 const { status, data: res } = await AmikomClient.FetchClassSchedule()
 
+                console.log(`[${tags.Debug}] status: ${status}`)
                 if (status == "success") {
                     data = await DatabaseService.classSchedules.Set(res ?? [])
+                } else {
+                    return null
                 }
             }
 
@@ -103,6 +108,8 @@ export const DatabaseService = {
                 expiredAt: await DatabaseService.getNewExpiredAt(),
                 lastModified: moment().toISOString()
             }
+
+            console.log(`[${tags.Debug}] classSchedules setting new obj. expired at: ${obj.expiredAt}`)
 
             await AmikomDB.set("classSchedules", obj)
 

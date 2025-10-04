@@ -172,16 +172,16 @@ export class AmikomScrapper {
                 return { status: "denied", data: []}
             }
 
-            await BrowserService.ClosePage(page)
+            // await BrowserService.ClosePage(page)
             return { status: "failed", data: null };
         } else {
             if (!(res?.[0]?.Kode)) {
-                await BrowserService.ClosePage(page)
+                // await BrowserService.ClosePage(page)
                 return { status: "failed", data: null };
             }
 
             // Possible subjects
-            await BrowserService.ClosePage(page)
+            // await BrowserService.ClosePage(page)
             return { status: "success", data: res };
         }
     }
