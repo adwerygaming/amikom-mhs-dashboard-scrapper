@@ -28,25 +28,27 @@ export interface ClassState {
     schedule: ClassSchedule
 }
 
-const expiredAt = moment().add(Number(env.CACHE_TTL), "seconds").toISOString()
-
 export const DatabaseService = {
+    async getNewExpiredAt() {
+        const expiredAt = moment().tz("Asia/Jakarta").add(Number(env.CACHE_TTL), "seconds").toISOString()
+        return expiredAt
+    },
     classStates: {
-        Get: async (): Promise<Record<string, ClassState>> => {
+        async Get(): Promise<Record<string, ClassState>> {
             let data: Record<string, ClassState> | null = await AmikomDB.get("classStates")
             return data ?? {}
         },
-        Set: async (states: Record<string, ClassState>): Promise<Record<string, ClassState>> => {
+        async Set(states: Record<string, ClassState>): Promise<Record<string, ClassState>> {
             await AmikomDB.set("classStates", states)
             return states
         },
-        Delete: async (): Promise<boolean> => {
+        async Delete(): Promise<boolean> {
             await AmikomDB.delete("classStates")
             return true
         }
     },
     me: {
-        Get: async (): Promise<DatabaseMeProp | null> => {
+        async Get(): Promise<DatabaseMeProp | null> {
             let data: DatabaseMeProp | null = await AmikomDB.get("me")
 
             // Expiry check
@@ -61,10 +63,10 @@ export const DatabaseService = {
 
             return data
         },
-        Set: async (data: FetchMeProp): Promise<DatabaseMeProp> => {
+        async Set(data: FetchMeProp): Promise<DatabaseMeProp> {
             const obj = {
                 data,
-                expiredAt,
+                expiredAt: await DatabaseService.getNewExpiredAt(),
                 lastModified: moment().toISOString()
             }
 
@@ -72,14 +74,14 @@ export const DatabaseService = {
 
             return obj
         },
-        Delete: async (): Promise<boolean> => {
+        async Delete(): Promise<boolean> {
             await AmikomDB.delete("me")
 
             return true
         }
     },
     classSchedules: {
-        Get: async (): Promise<DatabaseClassSchedulesProp | null> => {
+        async Get(): Promise<DatabaseClassSchedulesProp | null> => {
             let data: DatabaseClassSchedulesProp | null = await AmikomDB.get("classSchedules")
 
             // Expiry check
@@ -95,7 +97,7 @@ export const DatabaseService = {
 
             return data
         },
-        Set: async (data: ClassSchedules): Promise<DatabaseClassSchedulesProp> => {
+        async Set(data: ClassSchedules): Promise<DatabaseClassSchedulesProp> => {
             const obj = {
                 data,
                 expiredAt,
@@ -106,7 +108,7 @@ export const DatabaseService = {
 
             return obj
         },
-        Delete: async (): Promise<boolean> => {
+        async Delete(): Promise<boolean> => {
             await AmikomDB.delete("classSchedules")
 
             return true
