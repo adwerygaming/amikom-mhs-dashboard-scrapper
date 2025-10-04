@@ -9,6 +9,8 @@ import moment from "moment-timezone";
 import { ClassSchedule } from "../types/AmikomTypes.js";
 import { env } from "../utils/EnvManager.js";
 
+const POLLING_INTERVAL = Number(env.POLLING_INTERVAL) * 1000
+
 type AmikomServiceEvents = {
     class_started: ClassSchedule,
     class_upcoming_1h: ClassSchedule,
@@ -184,7 +186,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
                 this.emit('error', e)   
             }
 
-            await sleep(Number(env.POLLING_INTERVAL) ?? 5000) // pause for 5s
+            await sleep(POLLING_INTERVAL ?? 5000) // pause for 5s
         }
     }
 }

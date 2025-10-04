@@ -3,6 +3,7 @@ import { ClassSchedule, ClassSchedules, FetchMeProp } from "../types/AmikomTypes
 import AmikomDB from "./Koneksi.js"
 import AmikomClient from "../amikom/AmikomClient.js"
 import { env } from "../utils/EnvManager.js"
+import tags from "../utils/Tags.js"
 
 export interface DatabaseMeProp {
     data: FetchMeProp,
@@ -84,6 +85,7 @@ export const DatabaseService = {
             // Expiry check
             const expiredAt = data?.expiredAt
             if (moment()?.isAfter(expiredAt) || !expiredAt) {
+                console.log(`[${tags.Debug}] classSchedules is expired. [${expiredAt}]`)
                 const { status, data: res } = await AmikomClient.FetchClassSchedule()
 
                 if (status == "success") {
