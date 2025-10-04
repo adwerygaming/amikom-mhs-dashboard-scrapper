@@ -36,9 +36,6 @@ class TypedEmitter<T> {
     }
 }
 
-// set specific time for testing
-const momentNode = moment()//.hour(15).minute(0)
-
 interface GetClassByDayProp {
     day: Days
 }
@@ -99,6 +96,9 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
 
     private async startPolling() {
         while (true) {
+            // set specific time for testing
+            const momentNode = moment()//.hour(15).minute(0)
+            
             try {
                 console.log(`[${tags.Amikom}] Polling.`)
                 const getClassSchedule = await this.mhs.GetClassSchedules() // cached

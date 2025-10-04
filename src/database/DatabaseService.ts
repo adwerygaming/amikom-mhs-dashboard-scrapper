@@ -26,6 +26,8 @@ export interface ClassState {
     schedule: ClassSchedule
 }
 
+const expiredAt = moment().add(5, "minutes").toISOString()
+
 export const DatabaseService = {
     classStates: {
         Get: async (): Promise<Record<string, ClassState>> => {
@@ -60,7 +62,7 @@ export const DatabaseService = {
         Set: async (data: FetchMeProp): Promise<DatabaseMeProp> => {
             const obj = {
                 data,
-                expiredAt: moment().add(1, "day").toISOString(),
+                expiredAt,
                 lastModified: moment().toISOString()
             }
 
@@ -93,7 +95,7 @@ export const DatabaseService = {
         Set: async (data: ClassSchedules): Promise<DatabaseClassSchedulesProp> => {
             const obj = {
                 data,
-                expiredAt: moment().add(1, "day").toISOString(),
+                expiredAt,
                 lastModified: moment().toISOString()
             }
 
