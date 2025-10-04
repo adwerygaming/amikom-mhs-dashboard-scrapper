@@ -60,8 +60,16 @@ export class AmikomScrapper {
     }
 
     async Login(): Promise<LoginResponse> {
-        const CheckLogin = this.CheckLogin()
         const page = await BrowserService.NewPage()
+        const checkLogin = await this.CheckLogin(page)
+
+        if (checkLogin) {
+            console.log(`[${tags.Amikom}] Login: using cookies.`)
+
+            await sleep(700);
+            await BrowserService.ClosePage(page)
+            return { status: "success", loginStrategy: "cookie" }
+        }
 
         console.log(`[${tags.Amikom}] Login: Opening Login Page.`)
 
