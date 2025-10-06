@@ -38,7 +38,7 @@ export type AmikomKRSType = "Aktif" | "Belum Aktif"
 
 export interface LoginResponse {
     status: AmikomServiceStatuses
-    loginStrategy?: "manual" | "cookie" | "google"
+    loginStrategy?: "manual" | "cookie" | "google" | "unknown"
 }
 
 export interface FetchMeProp {

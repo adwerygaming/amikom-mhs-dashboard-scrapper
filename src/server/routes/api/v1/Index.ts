@@ -68,7 +68,6 @@ async function loadRoutes() {
                     const middlewares = module.metadata.middlewares ?? []
                     const execute = module.execute
 
-
                     if (method == "GET") {
                         router.get(routePath, ...middlewares, (req: Express.Request, res: Express.Response) => execute(req, res))
                     } else if (method == "POST") {

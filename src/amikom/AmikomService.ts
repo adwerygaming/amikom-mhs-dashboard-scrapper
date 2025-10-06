@@ -46,7 +46,6 @@ interface GetClassByDayProp {
 export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
     constructor() {
         super();
-        this.startPolling()
     }
 
     public mhs = {
@@ -97,7 +96,7 @@ export class AmikomService extends TypedEmitter<AmikomServiceEvents> {
         }
     }
 
-    private async startPolling() {
+    async startPolling() {
         while (true) {
             // set specific time for testing
             const momentNode = moment()//.hour(15).minute(0)

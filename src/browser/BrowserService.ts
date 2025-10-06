@@ -55,6 +55,7 @@ export const BrowserService = {
 
     async NewPage(): Promise<Page> {
         const browser = await this.GetBrowser();
+        console.log(`[${tags.Debug}] Opening new page.`)
         return await browser.newPage();
     },
 

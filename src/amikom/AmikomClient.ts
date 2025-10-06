@@ -7,8 +7,8 @@ const pw = env.AMIKOM_PASSWORD!
 
 const AmikomClient = new AmikomScrapper(npm, pw)
 
-const { status, loginStrategy } = await AmikomClient.Login()
+const { status, loginStrategy } = await AmikomClient.Login({ method: "google" })
 
-console.log(`[${tags.Amikom}] Login Status: ${status} | Using Strategy: ${loginStrategy}`)
+console.log(`[${tags.Amikom}] Doing first time Login. | Status: ${status} | Using Strategy: ${loginStrategy}`)
 
 export default AmikomClient
