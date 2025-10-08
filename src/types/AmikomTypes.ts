@@ -25,6 +25,7 @@ export const AmikomEndpoints = {
     rootDomain: "https://amikom.ac.id/",
     loginMhs: `https://auth.amikom.ac.id/mhs`,
     dashboardMhs: "https://mhs.amikom.ac.id/",
+    oauth: "https://oauth.amikom.ac.id",
 
     api: AmikomAPIEndpoints
 }
@@ -33,7 +34,7 @@ export interface GetStudyProgramByCodeProp {
     code: StudyProgram["code"]
 }
 
-export type AmikomServiceStatuses = "success" | "failed" | "denied"
+export type AmikomServiceStatuses = "success" | "failed" | "denied" | "error"
 export type AmikomKRSType = "Aktif" | "Belum Aktif"
 
 export interface LoginResponse {

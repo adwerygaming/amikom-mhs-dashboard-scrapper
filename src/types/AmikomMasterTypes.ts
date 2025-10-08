@@ -1,4 +1,4 @@
-// Jenjang Pendidikan
+// Jenjang Pendidikan / Education Level
 export interface EducationLevel {
     id: number;
     name: string;
@@ -20,7 +20,7 @@ export const EducationLevels: EducationLevel[] = [
     { "id": 35, "name": "S2" },
     { "id": 37, "name": "Sp-2" },
     { "id": 40, "name": "S3" }
-]
+] as const
 
 // Study Program / Prodi
 export interface StudyProgram {
@@ -69,7 +69,7 @@ export const StudyPrograms: StudyProgram[] = [
     { "code": "95", "name": "S1 - Hubungan Internasional (95)" },
     { "code": "96", "name": "S1 - Ilmu Komunikasi (96)" },
     { "code": "99", "name": "S3 - Doktor Informatika (99)" }
-]
+] as const
 
 
 // Religions / Agama
@@ -104,7 +104,7 @@ export const Religions: Religion[] = [
     { "id": "B", "name": "Budha" },
     { "id": "KH", "name": "Khonghucu" },
     { "id": "L", "name": "Lainnya" }
-]
+] as const
 
 // Occupations / Pekerjaan
 export interface Occupation {
@@ -127,7 +127,7 @@ export const Occupations: Occupation[] = [
     { "id": 12, "name": "Pensiunan" },
     { "id": 98, "name": "Sudah Meninggal" },
     { "id": 99, "name": "Lainnya" }
-]
+] as const
 
 
 // Incomes / Penghasilan
@@ -143,7 +143,7 @@ export const Incomes: Income[] = [
     { "id": 14, "name": "Rp. 2,000,000 - Rp. 4,999,999" },
     { "id": 15, "name": "Rp. 5,000,000 - Rp. 20,000,000" },
     { "id": 16, "name": "Lebih dari Rp. 20,000,000" }
-]
+] as const
 
 // Country / Negara
 export interface Country {
@@ -151,6 +151,7 @@ export interface Country {
     name: string;
 }
 
+// daym, this is a lot.
 export const Countries: Country[] = [
     { "id": "AD", "name": "Andorra" },
     { "id": "AE", "name": "United Arab Emirates" },
@@ -395,5 +396,5 @@ export const Countries: Country[] = [
     { "id": "ZA", "name": "South Africa" },
     { "id": "ZM", "name": "Zambia" },
     { "id": "ZW", "name": "Zimbabwe" }
-]
+] as const
 

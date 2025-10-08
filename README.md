@@ -33,7 +33,7 @@ And It's act just like normal students.
 
 ### Login Methods
 - [x] Manual Login (w/ NPM & Password)
-- [ ] Login With Amikom Email Domain
+- [x] Login With Amikom Email
 - [ ] Login With Cookies
 
 
@@ -57,7 +57,6 @@ Example Response:
 [Amikom] Login Status: success | Using Strategy: cookie
 [Amikom] Login Status: failed
 ```
-
 
 #### Get Jadwal Kuliah (1 week)
 Usage:

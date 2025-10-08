@@ -88,13 +88,15 @@ export class AmikomScrapper {
             console.log(`[${tags.Debug}] ${AmikomEndpoints.loginMhs}`)
 
             if (url.includes(AmikomEndpoints.loginMhs)) {
+                console.log(`[${tags.Debug}] got redirected to ${url}`)
                 // Got redirected to login
                 await BrowserService.ClosePage(page)
-                return true
+                return false
             } else {
+                console.log(`[${tags.Debug}] didnt get redirected`)
                 // Possibly still on dashboard
                 await BrowserService.ClosePage(page)
-                return false
+                return true
             }
         } catch (e) {
             console.error(`[${tags.Amikom}] CheckLogin: Failed`, e);
@@ -202,20 +204,70 @@ export class AmikomScrapper {
                 return { status: "success", loginStrategy: dashboardMahastudentTextExist ? "cookie" : "manual" }
             } catch (e) {
                 console.log(`[${tags.Error}] Logged in, but didnt get redirected.`)
-                return { status: "failed" }
+                return { status: "error" }
             } finally {
                 await BrowserService.ClosePage(page)
             }
         } else if (method == "google") {
-            if (!dashboardMahastudentTextExist) {
-                console.log(`[${tags.Amikom}] Login: Using Amikom Student Google Account.`)
-                const loginButton = await page.waitForSelector(googleBtnKey, { visible: true });
-                if (loginButton) {
-                    console.log(`[${tags.Debug}] Login: Found Login Button`)
+            try {
+                if (!dashboardMahastudentTextExist) {
+                    console.log(`[${tags.Amikom}] Login: Using Amikom Student Google Account.`)
+                    const loginButton = await page.waitForSelector(googleBtnKey, { visible: true });
+
+                    if (loginButton) {
+                        console.log(`[${tags.Debug}] Login: Found Login Button`)
+
+                        await page.click(googleBtnKey)
+                    }
+
+                    await page.waitForNavigation({ waitUntil: "load", timeout: 16000 })
+
+                    // get redirected to oauth.amikom.ac.id
+                    // if not logged in using any google account
+                    // will get redirected to accounts.google.com
+                    // if not, prob stay on the oauth.amikom.ac.id and go to dashboard
+
+                    const url = page.url()
+                    console.log(`[${tags.Debug}] After clicking im on ${url}`)
+
+                    const isGoogleAccountPage = url.includes("accounts.google.com")
+                    const isOauthAmikomPage = url.includes(AmikomEndpoints.oauth)
+
+                    if (isGoogleAccountPage) {
+                        // user need to manually login
+                        // user enters information
+                        // wait for nagivation back on oauth.amikom.ac.id
+
+                        console.log(`[${tags.Amikom}] USER INPUT NEEDED!`)
+                        console.log(`[${tags.Amikom}] By using google account as login option, you need to log in to your @students.amikom.ac.id account`)
+                        console.log(`[${tags.Amikom}] Please enter the information such as email, password and 2FA (if any)`)
+                        console.log(`[${tags.Amikom}] Script will continue after get redirected back to oauth.amikom.ac.id`)
+                        console.log(`[${tags.Amikom}] Take your time :)`)
+
+                        //! apperanly this dosent work.
+                        await page.waitForFunction(
+                            () => window.location.href.includes(AmikomEndpoints.dashboardMhs),
+                            { timeout: 0 }
+                        )
+
+                        console.log(`[${tags.Amikom}] Redirected back to oauth.amikom.ac.id`)
+                    } else if (isOauthAmikomPage) {
+                        console.log(`[${tags.Amikom}] Waiting for oauth response...`)
+
+                        await page.waitForNavigation({ waitUntil: "load", timeout: 16000 })
+                    }
+
+                    return { status: "success", loginStrategy: "google" }
+                } else {
+                    return { status: "success", loginStrategy: "cookie" }
                 }
+            } catch (e) {
+                return { status: "error" }
+            } finally {
+                await BrowserService.ClosePage(page)
             }
-            return { status: "success" }
         } else {
+            await BrowserService.ClosePage(page)
             return { status: "failed", loginStrategy: "unknown" }
         }
     }
@@ -323,7 +375,7 @@ export class AmikomScrapper {
             console.log(`[${tags.Error}] FetchMe: Failed to evaluate`)
             console.error(e)
 
-            return { status: "failed" }
+            return { status: "error" }
         } finally {
             await BrowserService.ClosePage(page)
         }
